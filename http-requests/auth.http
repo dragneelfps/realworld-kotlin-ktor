@@ -1,0 +1,71 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+
+# REGISTER
+POST {{base-url}}/users
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "drag3@gmail.com",
+    "username": "drag3",
+    "password": "1234"
+  }
+}
+
+> {%
+ client.assert(typeof response.body.user.token !== "undefined", "No token returned");
+ client.global.set("auth_token", response.body.user.token);
+ %}
+
+###
+
+# CURRENT USER
+GET {{base-url}}/user
+Accept: application/json
+Authorization: Bearer {{auth_token}}
+
+###
+
+# LOGIN
+POST {{base-url}}/users/login
+Content-Type: application/json
+
+{
+  "user": {
+    "email": "drag1@gmail.com",
+    "password": "1234"
+  }
+}
+
+> {%
+ client.assert(typeof response.body.user.token !== "undefined", "No token returned");
+ client.global.set("auth_token", response.body.user.token);
+ %}
+
+###
+
+# UPDATE USER
+PUT {{base-url}}/user
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+  "user": {
+    "bio": "I work here too",
+    "image": "https://image2.com"
+  }
+}
+
+###
+
+# GET ALL USERS
+GET {{base-url}}/users
+Accept: application/json
+
+###
