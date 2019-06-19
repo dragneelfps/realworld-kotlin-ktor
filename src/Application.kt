@@ -6,10 +6,7 @@ import com.nooblabs.api.profile
 import com.nooblabs.service.AuthService
 import com.nooblabs.service.DatabaseFactory
 import com.nooblabs.service.ProfileService
-import com.nooblabs.util.AuthenticationException
-import com.nooblabs.util.AuthorizationException
-import com.nooblabs.util.MissingParameter
-import com.nooblabs.util.SimpleJWT
+import com.nooblabs.util.*
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
@@ -67,6 +64,12 @@ fun Application.module() {
             }
             exception<MissingParameter>() { cause ->
                 call.respond(HttpStatusCode.BadRequest, mapOf("missing" to cause.params))
+            }
+            exception<UserExists> {
+                call.respond(HttpStatusCode.BadRequest, mapOf("reason" to "user exists"))
+            }
+            exception<UserDoesNotExists> {
+                call.respond(HttpStatusCode.NotFound, mapOf("reason" to "user doesnt not exists"))
             }
 
         }

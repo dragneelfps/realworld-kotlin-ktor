@@ -6,7 +6,6 @@ import com.nooblabs.models.UpdateUser
 import com.nooblabs.models.UserResponse
 import com.nooblabs.service.AuthService
 import com.nooblabs.util.AuthenticationException
-import com.nooblabs.util.AuthorizationException
 import com.nooblabs.util.SimpleJWT
 import com.nooblabs.util.userId
 import io.ktor.application.call
@@ -35,13 +34,13 @@ fun Route.auth(authService: AuthService, simpleJWT: SimpleJWT) {
 
     authenticate {
         get("/user") {
-            val user = authService.getUserById(call.userId()) ?: error("invalid state")
+            val user = authService.getUserById(call.userId())
             call.respond(UserResponse.fromUser(user))
         }
 
         put("/user") {
             val updateUser = call.receive<UpdateUser>()
-            val user = authService.updateUser(call.userId(), updateUser) ?: throw AuthorizationException()
+            val user = authService.updateUser(call.userId(), updateUser)
             call.respond(UserResponse.fromUser(user, token = simpleJWT.sign(user.id)))
         }
     }

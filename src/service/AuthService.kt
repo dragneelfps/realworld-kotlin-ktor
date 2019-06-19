@@ -5,13 +5,20 @@ import com.nooblabs.models.UpdateUser
 import com.nooblabs.models.User
 import com.nooblabs.models.Users
 import com.nooblabs.service.DatabaseFactory.dbQuery
+import com.nooblabs.util.UserDoesNotExists
+import com.nooblabs.util.UserExists
 import org.jetbrains.exposed.sql.and
+import org.jetbrains.exposed.sql.or
 import java.util.*
 
 class AuthService {
 
     suspend fun register(registerUser: RegisterUser): User {
         return dbQuery {
+            val userInDatabase =
+                User.find { (Users.username eq registerUser.user.username) or (Users.email eq registerUser.user.password) }
+                    .firstOrNull()
+            if (userInDatabase != null) throw UserExists()
             User.new {
                 username = registerUser.user.username
                 email = registerUser.user.email
@@ -32,21 +39,22 @@ class AuthService {
         }
     }
 
-    suspend fun getUserById(id: String): User? {
+    suspend fun getUserById(id: String): User {
         return dbQuery {
-            User.findById(UUID.fromString(id))
+            User.findById(UUID.fromString(id)) ?: throw UserDoesNotExists()
         }
     }
 
-    suspend fun loginAndGetUser(email: String, password: String): User? {
+    suspend fun loginAndGetUser(email: String, password: String): User {
         return dbQuery {
             User.find { (Users.email eq email) and (Users.password eq password) }.firstOrNull()
+                ?: throw UserDoesNotExists()
         }
     }
 
-    suspend fun updateUser(userId: String, updateUser: UpdateUser): User? {
+    suspend fun updateUser(userId: String, updateUser: UpdateUser): User {
         return dbQuery {
-            val user = User.find { Users.email eq userId }.firstOrNull() ?: return@dbQuery null
+            val user = User.find { Users.email eq userId }.firstOrNull() ?: throw UserDoesNotExists()
             user.apply {
                 email = updateUser.user.email ?: email
                 password = updateUser.user.password ?: password
@@ -54,11 +62,6 @@ class AuthService {
                 image = updateUser.user.image ?: image
                 bio = updateUser.user.bio ?: bio
             }
-//            user.email = updateUser.user.email ?: user.email
-//            user.password = updateUser.user.password ?: user.password
-//            user.username = updateUser.user.username ?: user.username
-//            user.image = updateUser.user.image ?: user.image
-//            user.bio = updateUser.user.bio ?: user.bio
         }
     }
 
