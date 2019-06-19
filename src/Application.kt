@@ -14,6 +14,7 @@ import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
+import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
@@ -54,6 +55,7 @@ fun Application.module() {
     DatabaseFactory.init()
 
     val authService = AuthService()
+    val profileService = ProfileService()
 
     routing {
         install(StatusPages) {
@@ -64,7 +66,7 @@ fun Application.module() {
                 call.respond(HttpStatusCode.Forbidden)
             }
             exception<MissingParameter>() { cause ->
-                call.respond(HttpStatusCode.BadRequest, "missing" to cause.param)
+                call.respond(HttpStatusCode.BadRequest, mapOf("missing" to cause.params))
             }
 
         }
@@ -76,6 +78,7 @@ fun Application.module() {
             }
 
             auth(authService, simpleJWT)
+            profile(profileService)
         }
     }
 }

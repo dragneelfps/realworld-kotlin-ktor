@@ -1,5 +1,6 @@
 package com.nooblabs.service
 
+import com.nooblabs.models.Followings
 import com.nooblabs.models.Users
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
@@ -15,6 +16,7 @@ object DatabaseFactory {
         Database.connect(hikari())
         transaction {
             create(Users)
+            create(Followings)
 
             //NOTE: Insert initial rows if any here
         }

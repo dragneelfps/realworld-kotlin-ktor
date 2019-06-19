@@ -44,9 +44,9 @@ class AuthService {
         }
     }
 
-    suspend fun updateUser(userEmail: String, updateUser: UpdateUser): User? {
+    suspend fun updateUser(userId: String, updateUser: UpdateUser): User? {
         return dbQuery {
-            val user = User.find { Users.email eq userEmail }.firstOrNull() ?: return@dbQuery null
+            val user = User.find { Users.email eq userId }.firstOrNull() ?: return@dbQuery null
             user.apply {
                 email = updateUser.user.email ?: email
                 password = updateUser.user.password ?: password
