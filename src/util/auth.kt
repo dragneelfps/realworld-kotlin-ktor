@@ -9,5 +9,3 @@ open class SimpleJWT(secret: String) {
     fun <T> sign(id: T): String = JWT.create().withClaim("id", id.toString()).sign(algorithm)
 }
 
-class AuthenticationException : RuntimeException()
-class AuthorizationException : RuntimeException()
