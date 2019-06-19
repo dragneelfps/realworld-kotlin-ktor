@@ -2,16 +2,18 @@ package com.nooblabs
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.nooblabs.api.auth
+import com.nooblabs.api.profile
 import com.nooblabs.service.AuthService
 import com.nooblabs.service.DatabaseFactory
+import com.nooblabs.service.ProfileService
 import com.nooblabs.util.AuthenticationException
 import com.nooblabs.util.AuthorizationException
+import com.nooblabs.util.MissingParameter
 import com.nooblabs.util.SimpleJWT
 import io.ktor.application.Application
 import io.ktor.application.call
 import io.ktor.application.install
 import io.ktor.auth.Authentication
-import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.jwt.jwt
 import io.ktor.features.CallLogging
 import io.ktor.features.ContentNegotiation
@@ -60,6 +62,9 @@ fun Application.module() {
             }
             exception<AuthorizationException> { cause ->
                 call.respond(HttpStatusCode.Forbidden)
+            }
+            exception<MissingParameter>() { cause ->
+                call.respond(HttpStatusCode.BadRequest, "missing" to cause.param)
             }
 
         }
