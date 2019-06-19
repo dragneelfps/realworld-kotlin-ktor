@@ -24,7 +24,7 @@ fun Route.auth(authService: AuthService, simpleJWT: SimpleJWT) {
     post("/users") {
         val registerUser = call.receive<RegisterUser>()
         val newUser = authService.register(registerUser)
-        call.respond(UserResponse.fromUser(newUser, token = simpleJWT.sign(newUser.email)))
+        call.respond(UserResponse.fromUser(newUser, token = simpleJWT.sign(newUser.id)))
     }
 
     post("/users/login") {
