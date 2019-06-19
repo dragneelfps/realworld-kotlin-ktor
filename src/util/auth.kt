@@ -6,7 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm
 open class SimpleJWT(secret: String) {
     private val algorithm = Algorithm.HMAC256(secret)
     val verifier = JWT.require(algorithm).build()
-    fun sign(email: String): String = JWT.create().withClaim("email", email).sign(algorithm)
+    fun <T> sign(id: T): String = JWT.create().withClaim("id", id.toString()).sign(algorithm)
 }
 
 class AuthenticationException : RuntimeException()

@@ -6,6 +6,7 @@ import com.nooblabs.models.User
 import com.nooblabs.models.Users
 import com.nooblabs.service.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.and
+import java.util.*
 
 class AuthService {
 
@@ -28,6 +29,12 @@ class AuthService {
     suspend fun getUserByEmail(email: String): User? {
         return dbQuery {
             User.find { Users.email eq email }.firstOrNull()
+        }
+    }
+
+    suspend fun getUserById(id: String): User? {
+        return dbQuery {
+            User.findById(UUID.fromString(id))
         }
     }
 

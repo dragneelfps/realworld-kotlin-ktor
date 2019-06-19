@@ -38,7 +38,7 @@ fun Application.module() {
         jwt {
             verifier(simpleJWT.verifier)
             validate {
-                UserIdPrincipal(it.payload.getClaim("email").asString())
+                UserIdPrincipal(it.payload.getClaim("id").asString())
             }
         }
     }

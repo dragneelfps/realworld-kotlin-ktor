@@ -31,13 +31,13 @@ fun Route.auth(authService: AuthService, simpleJWT: SimpleJWT) {
         val loginUser = call.receive<LoginUser>()
         val user = authService.loginAndGetUser(loginUser.user.email, loginUser.user.password)
             ?: throw AuthenticationException()
-        call.respond(UserResponse.fromUser(user, token = simpleJWT.sign(user.email)))
+        call.respond(UserResponse.fromUser(user, token = simpleJWT.sign(user.id)))
     }
 
     authenticate {
         get("/user") {
             val principal = call.principal<UserIdPrincipal>() ?: throw AuthorizationException()
-            val user = authService.getUserByEmail(principal.name) ?: error("invalid state")
+            val user = authService.getUserById(principal.name) ?: error("invalid state")
             call.respond(UserResponse.fromUser(user))
         }
 
@@ -45,7 +45,7 @@ fun Route.auth(authService: AuthService, simpleJWT: SimpleJWT) {
             val updateUser = call.receive<UpdateUser>()
             val principal = call.principal<UserIdPrincipal>() ?: throw AuthorizationException()
             val user = authService.updateUser(principal.name, updateUser) ?: throw AuthorizationException()
-            call.respond(UserResponse.fromUser(user, token = simpleJWT.sign(user.email)))
+            call.respond(UserResponse.fromUser(user, token = simpleJWT.sign(user.id)))
         }
     }
 
