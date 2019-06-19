@@ -36,6 +36,7 @@ fun Application.module() {
 
     install(Authentication) {
         jwt {
+            authSchemes("Token")
             verifier(simpleJWT.verifier)
             validate {
                 UserIdPrincipal(it.payload.getClaim("id").asString())

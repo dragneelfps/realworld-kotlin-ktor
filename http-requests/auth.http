@@ -28,7 +28,7 @@ Content-Type: application/json
 # CURRENT USER
 GET {{base-url}}/user
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Token {{auth_token}}
 
 ###
 
@@ -53,7 +53,7 @@ Content-Type: application/json
 # UPDATE USER
 PUT {{base-url}}/user
 Content-Type: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Token {{auth_token}}
 
 {
   "user": {
@@ -79,20 +79,20 @@ Accept: application/json
 # GET PROFILE - AUTHENTICATED
 GET {{base-url}}/profiles/drag1
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Token {{auth_token}}
 
 ###
 
 # FOLLOW USER
 POST {{base-url}}/profiles/drag3/follow
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Token {{auth_token}}
 
 ###
 
 # UNFOLLOW USER
 DELETE {{base-url}}/profiles/drag3/follow
 Accept: application/json
-Authorization: Bearer {{auth_token}}
+Authorization: Token {{auth_token}}
 
 ###
