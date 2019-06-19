@@ -1,10 +1,13 @@
 package com.nooblabs
 
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.nooblabs.api.article
 import com.nooblabs.api.auth
 import com.nooblabs.api.profile
+import com.nooblabs.service.ArticleService
 import com.nooblabs.service.AuthService
 import com.nooblabs.service.DatabaseFactory
+import com.nooblabs.service.DatabaseFactory.drop
 import com.nooblabs.service.ProfileService
 import com.nooblabs.util.*
 import io.ktor.application.Application
@@ -54,6 +57,7 @@ fun Application.module() {
 
     val authService = AuthService()
     val profileService = ProfileService()
+    val articleService = ArticleService()
 
     routing {
         install(StatusPages) {
@@ -72,6 +76,9 @@ fun Application.module() {
             exception<UserDoesNotExists> {
                 call.respond(HttpStatusCode.NotFound, mapOf("reason" to "user doesnt not exists"))
             }
+            exception<ArticleDoesNotExist> { cause ->
+                call.respond(HttpStatusCode.NotFound, mapOf("slug" to cause.slug))
+            }
 
         }
 
@@ -83,6 +90,12 @@ fun Application.module() {
 
             auth(authService, simpleJWT)
             profile(profileService)
+            article(articleService)
+
+            get("/drop") {
+                drop()
+                call.respond("OK")
+            }
         }
     }
 }

@@ -8,3 +8,5 @@ class MissingParameter(val params: Set<String>) : RuntimeException()
 class UserExists : RuntimeException()
 
 class UserDoesNotExists : RuntimeException()
+
+class ArticleDoesNotExist(val slug: String) : RuntimeException()

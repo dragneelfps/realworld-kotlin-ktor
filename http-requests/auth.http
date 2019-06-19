@@ -12,8 +12,8 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "drag3@gmail.com",
-    "username": "drag3",
+    "email": "drag1@gmail.com",
+    "username": "drag1",
     "password": "1234"
   }
 }
@@ -38,7 +38,7 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "drag1@gmail.com",
+    "email": "drag3@gmail.com",
     "password": "1234"
   }
 }
@@ -71,7 +71,7 @@ Accept: application/json
 ###
 
 # GET PROFILE - NOT AUTHENTICATED
-GET {{base-url}}/profiles/drag2
+GET {{base-url}}/profiles/drag3
 Accept: application/json
 
 ###
@@ -84,7 +84,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # FOLLOW USER
-POST {{base-url}}/profiles/drag3/follow
+POST {{base-url}}/profiles/drag1/follow
 Accept: application/json
 Authorization: Token {{auth_token}}
 
@@ -93,6 +93,92 @@ Authorization: Token {{auth_token}}
 # UNFOLLOW USER
 DELETE {{base-url}}/profiles/drag3/follow
 Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# CREATE ARTICLE
+POST {{base-url}}/articles
+Content-Type: application/json
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "article": {
+    "title": "My puupy",
+    "description": "is awesome",
+    "body": "I love him",
+    "tagList": [
+      "home",
+      "dragons"
+    ]
+  }
+}
+
+> {%
+ if(response.body.article !== undefined && response.body.article.slug !== undefined)
+   client.global.set("slug", response.body.article.slug)
+ %}
+
+###
+
+# DROP DB
+
+GET {{base-url}}/drop
+
+###
+
+# UPDATE ARTICLE
+PUT {{base-url}}/articles/how-to-train-your-dragon-2
+Accept: application/json
+Content-Type: application/json
+Authorization: Token {{auth_token}}
+
+{
+  "article": {
+    "title": "How to train your dragon 4",
+    "description": "Ever wonder how it happend?",
+    "body": "You have to believe. Please"
+  }
+}
+
+###
+
+# FAVORITE ARTICLE
+POST {{base-url}}/articles/my-puupy/favorite
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# UN-FAVORITE ARTICLE
+DELETE {{base-url}}/articles/my-puupy/favorite
+Accept: application/json
+Authorization: Token {{auth_token}}
+
+###
+
+# DELETE ARTICLE
+DELETE {{base-url}}/articles/how-to-train-your-dragon-23
+Authorization: Token {{auth_token}}
+
+###
+
+# GET ALL TAGS
+GET {{base-url}}/tags
+Accept: application/json
+
+###
+
+# GET ARTICLES
+GET {{base-url}}/articles
+Authorization: Token {{auth_token}}
+
+###
+
+
+# GET FEED
+GET {{base-url}}/articles/feed
 Authorization: Token {{auth_token}}
 
 ###
