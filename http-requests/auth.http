@@ -117,7 +117,7 @@ Authorization: Token {{auth_token}}
 
 > {%
  if(response.body.article !== undefined && response.body.article.slug !== undefined)
-   client.global.set("slug", response.body.article.slug)
+   client.global.set("slug", response.body.article.slug);
  %}
 
 ###
@@ -141,6 +141,12 @@ Authorization: Token {{auth_token}}
     "body": "You have to believe. Please"
   }
 }
+
+###
+
+# GET ARTICLE
+GET {{base-url}}/articles/my-puupy-2
+Accept: application/json
 
 ###
 

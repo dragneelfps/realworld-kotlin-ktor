@@ -41,6 +41,13 @@ class ArticleService {
         }
     }
 
+    suspend fun getArticle(slug: String): ArticleResponse {
+        return dbQuery {
+            val article = getArticleBySlug(slug)
+            getArticleResponse(article)
+        }
+    }
+
     suspend fun getArticles(userId: String? = null, filter: Map<String, String?>): List<ArticleResponse.Article> {
         return dbQuery {
             val user = if (userId != null) getUser(userId) else null

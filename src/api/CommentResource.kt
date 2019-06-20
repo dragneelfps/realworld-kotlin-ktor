@@ -19,6 +19,11 @@ import io.ktor.routing.post
 fun Route.comment(commentService: CommentService) {
 
     authenticate {
+
+        /*
+            Add Comments to an Article
+            POST /api/articles/:slug/comments
+         */
         post("/articles/{slug}/comments") {
             val slug = call.param("slug")
             val postComment = call.receive<PostComment>()
@@ -26,6 +31,10 @@ fun Route.comment(commentService: CommentService) {
             call.respond(comment)
         }
 
+        /*
+            Delete Comment
+            DELETE /api/articles/:slug/comments/:id
+         */
         delete("/articles/{slug}/comments/{id}") {
             val slug = call.param("slug")
             val id = call.param("id").toInt()
@@ -35,12 +44,18 @@ fun Route.comment(commentService: CommentService) {
     }
 
     authenticate(optional = true) {
+
+        /*
+            Get Comments from an Article
+            GET /api/articles/:slug/comments
+         */
         get("/articles/{slug}/comments") {
             val slug = call.param("slug")
             val userId = call.principal<UserIdPrincipal>()?.name
             val comments = commentService.getComments(userId, slug)
             call.respond(mapOf("comments" to comments))
         }
+
     }
 
 }

@@ -18,6 +18,10 @@ fun Route.article(articleService: ArticleService) {
 
     authenticate {
 
+        /*
+            Feed Articles
+            GET /api/articles/feed
+         */
         get("/articles/feed") {
             val params = call.parameters
             val filter = mapOf(
@@ -28,12 +32,20 @@ fun Route.article(articleService: ArticleService) {
             call.respond(mapOf("articles" to articles))
         }
 
+        /*
+            Create Article
+            POST /api/articles
+         */
         post("/articles") {
             val newArticle = call.receive<NewArticle>()
             val article = articleService.createArticle(call.userId(), newArticle)
             call.respond(article)
         }
 
+        /*
+            Update Article
+            PUT /api/articles/:slug
+         */
         put("/articles/{slug}") {
             val slug = call.param("slug")
             val updateArticle = call.receive<UpdateArticle>()
@@ -41,18 +53,30 @@ fun Route.article(articleService: ArticleService) {
             call.respond(article)
         }
 
+        /*
+            Favorite Article
+            POST /api/articles/:slug/favorite
+         */
         post("/articles/{slug}/favorite") {
             val slug = call.param("slug")
             val article = articleService.changeFavorite(call.userId(), slug, favorite = true)
             call.respond(article)
         }
 
+        /*
+            Unfavorite Article
+            DELETE /api/articles/:slug/favorite
+         */
         delete("/articles/{slug}/favorite") {
             val slug = call.param("slug")
             val article = articleService.changeFavorite(call.userId(), slug, favorite = false)
             call.respond(article)
         }
 
+        /*
+            Delete Article
+            DELETE /api/articles/:slug
+         */
         delete("/articles/{slug}") {
             val slug = call.param("slug")
             articleService.deleteArticle(call.userId(), slug)
@@ -61,6 +85,11 @@ fun Route.article(articleService: ArticleService) {
     }
 
     authenticate(optional = true) {
+
+        /*
+            List Articles
+            GET /api/articles
+         */
         get("/articles") {
             val userId = call.principal<UserIdPrincipal>()?.name
             val params = call.parameters
@@ -75,8 +104,23 @@ fun Route.article(articleService: ArticleService) {
             val articles = articleService.getArticles(userId, filter)
             call.respond(mapOf("articles" to articles))
         }
+
     }
 
+    /*
+        Get Article
+        GET /api/articles/:slug
+     */
+    get("/articles/{slug}") {
+        val slug = call.param("slug")
+        val article = articleService.getArticle(slug)
+        call.respond(article)
+    }
+
+    /*
+        Get Tags
+        GET /api/tags
+     */
     get("/tags") {
         call.respond(articleService.getAllTags())
     }
