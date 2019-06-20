@@ -3,7 +3,7 @@ package com.nooblabs.api
 import com.nooblabs.models.NewArticle
 import com.nooblabs.models.UpdateArticle
 import com.nooblabs.service.ArticleService
-import com.nooblabs.util.MissingParameter
+import com.nooblabs.util.param
 import com.nooblabs.util.userId
 import io.ktor.application.call
 import io.ktor.auth.UserIdPrincipal
@@ -35,26 +35,26 @@ fun Route.article(articleService: ArticleService) {
         }
 
         put("/articles/{slug}") {
-            val slug = call.parameters["slug"] ?: throw MissingParameter(setOf("slug"))
+            val slug = call.param("slug")
             val updateArticle = call.receive<UpdateArticle>()
             val article = articleService.updateArticle(call.userId(), slug, updateArticle)
             call.respond(article)
         }
 
         post("/articles/{slug}/favorite") {
-            val slug = call.parameters["slug"] ?: throw MissingParameter(setOf("slug"))
+            val slug = call.param("slug")
             val article = articleService.changeFavorite(call.userId(), slug, favorite = true)
             call.respond(article)
         }
 
         delete("/articles/{slug}/favorite") {
-            val slug = call.parameters["slug"] ?: throw MissingParameter(setOf("slug"))
+            val slug = call.param("slug")
             val article = articleService.changeFavorite(call.userId(), slug, favorite = false)
             call.respond(article)
         }
 
         delete("/articles/{slug}") {
-            val slug = call.parameters["slug"] ?: throw MissingParameter(setOf("slug"))
+            val slug = call.param("slug")
             articleService.deleteArticle(call.userId(), slug)
             call.respond(HttpStatusCode.OK)
         }

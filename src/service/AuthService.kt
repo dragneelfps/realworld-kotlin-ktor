@@ -16,7 +16,7 @@ class AuthService {
     suspend fun register(registerUser: RegisterUser): User {
         return dbQuery {
             val userInDatabase =
-                User.find { (Users.username eq registerUser.user.username) or (Users.email eq registerUser.user.password) }
+                User.find { (Users.username eq registerUser.user.username) or (Users.email eq registerUser.user.email) }
                     .firstOrNull()
             if (userInDatabase != null) throw UserExists()
             User.new {

@@ -3,7 +3,7 @@ package com.nooblabs.util
 class AuthenticationException : RuntimeException()
 class AuthorizationException : RuntimeException()
 
-class MissingParameter(val params: Set<String>) : RuntimeException()
+open class ValidationException(val params: Map<String, List<String>>) : RuntimeException()
 
 class UserExists : RuntimeException()
 

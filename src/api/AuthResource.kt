@@ -5,7 +5,6 @@ import com.nooblabs.models.RegisterUser
 import com.nooblabs.models.UpdateUser
 import com.nooblabs.models.UserResponse
 import com.nooblabs.service.AuthService
-import com.nooblabs.util.AuthenticationException
 import com.nooblabs.util.SimpleJWT
 import com.nooblabs.util.userId
 import io.ktor.application.call
@@ -28,7 +27,6 @@ fun Route.auth(authService: AuthService, simpleJWT: SimpleJWT) {
     post("/users/login") {
         val loginUser = call.receive<LoginUser>()
         val user = authService.loginAndGetUser(loginUser.user.email, loginUser.user.password)
-            ?: throw AuthenticationException()
         call.respond(UserResponse.fromUser(user, token = simpleJWT.sign(user.id)))
     }
 

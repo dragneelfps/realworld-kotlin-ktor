@@ -1,6 +1,7 @@
 package com.nooblabs
 
 import com.fasterxml.jackson.databind.SerializationFeature
+import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.nooblabs.api.article
 import com.nooblabs.api.auth
 import com.nooblabs.api.profile
@@ -61,25 +62,30 @@ fun Application.module() {
 
     routing {
         install(StatusPages) {
-            exception<AuthenticationException> { cause ->
+            exception<AuthenticationException> {
                 call.respond(HttpStatusCode.Unauthorized)
             }
-            exception<AuthorizationException> { cause ->
+            exception<AuthorizationException> {
                 call.respond(HttpStatusCode.Forbidden)
             }
-            exception<MissingParameter>() { cause ->
-                call.respond(HttpStatusCode.BadRequest, mapOf("missing" to cause.params))
+            exception<ValidationException> { cause ->
+                call.respond(HttpStatusCode.UnprocessableEntity, mapOf("errors" to cause.params))
             }
             exception<UserExists> {
-                call.respond(HttpStatusCode.BadRequest, mapOf("reason" to "user exists"))
+                call.respond(HttpStatusCode.UnprocessableEntity, mapOf("errors" to mapOf("user" to listOf("exists"))))
             }
             exception<UserDoesNotExists> {
-                call.respond(HttpStatusCode.NotFound, mapOf("reason" to "user doesnt not exists"))
+                call.respond(HttpStatusCode.NotFound)
             }
-            exception<ArticleDoesNotExist> { cause ->
-                call.respond(HttpStatusCode.NotFound, mapOf("slug" to cause.slug))
+            exception<ArticleDoesNotExist> {
+                call.respond(HttpStatusCode.NotFound)
             }
-
+            exception<MissingKotlinParameterException> { cause ->
+                call.respond(
+                    HttpStatusCode.UnprocessableEntity,
+                    mapOf("errors" to mapOf(cause.parameter.name to listOf("can't be empty")))
+                )
+            }
         }
 
         route("/api") {
