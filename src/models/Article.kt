@@ -61,6 +61,7 @@ class Article(id: EntityID<UUID>) : UUIDEntity(id) {
     var favoritedBy by User via FavoriteArticle
     var createdAt by Articles.createdAt
     var updatedAt by Articles.updatedAt
+    var comments by Comment via ArticleComment
 }
 
 data class NewArticle(val article: NewArticle.Article) {

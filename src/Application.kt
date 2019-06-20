@@ -4,12 +4,10 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.nooblabs.api.article
 import com.nooblabs.api.auth
+import com.nooblabs.api.comment
 import com.nooblabs.api.profile
-import com.nooblabs.service.ArticleService
-import com.nooblabs.service.AuthService
-import com.nooblabs.service.DatabaseFactory
+import com.nooblabs.service.*
 import com.nooblabs.service.DatabaseFactory.drop
-import com.nooblabs.service.ProfileService
 import com.nooblabs.util.*
 import io.ktor.application.Application
 import io.ktor.application.call
@@ -59,6 +57,7 @@ fun Application.module() {
     val authService = AuthService()
     val profileService = ProfileService()
     val articleService = ArticleService()
+    val commentService = CommentService()
 
     routing {
         install(StatusPages) {
@@ -86,6 +85,9 @@ fun Application.module() {
                     mapOf("errors" to mapOf(cause.parameter.name to listOf("can't be empty")))
                 )
             }
+            exception<CommentNotFound> {
+                call.respond(HttpStatusCode.NotFound)
+            }
         }
 
         route("/api") {
@@ -97,6 +99,7 @@ fun Application.module() {
             auth(authService, simpleJWT)
             profile(profileService)
             article(articleService)
+            comment(commentService)
 
             get("/drop") {
                 drop()

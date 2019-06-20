@@ -12,8 +12,8 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "drag1@gmail.com",
-    "username": "drag1",
+    "email": "drag2@gmail.com",
+    "username": "drag2",
     "password": "1234"
   }
 }
@@ -38,7 +38,7 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "drag3@gmail.com",
+    "email": "drag1@gmail.com",
     "password": "1234"
   }
 }
@@ -105,9 +105,9 @@ Authorization: Token {{auth_token}}
 
 {
   "article": {
-    "title": "My puupy",
+    "title": "My puupy 2",
     "description": "is awesome",
-    "body": "I love him",
+    "body": "I love him 2",
     "tagList": [
       "home",
       "dragons"
@@ -179,6 +179,39 @@ Authorization: Token {{auth_token}}
 
 # GET FEED
 GET {{base-url}}/articles/feed
+Authorization: Token {{auth_token}}
+
+###
+
+# ADD COMMENT
+POST {{base-url}}/articles/my-puupy-2/comments
+Authorization: Token {{auth_token}}
+Accept: application/json
+Content-Type: application/json
+
+{
+  "comment": {
+    "body": "sooo cute"
+  }
+}
+
+###
+
+# GET COMMENTS - AUTHORIZED
+GET {{base-url}}/articles/my-puupy-2/comments
+Authorization: Token {{auth_token}}
+Accept: application/json
+
+###
+
+# GET COMMENTS - UN-AUTHORIZED
+GET {{base-url}}/articles/my-puupy/comments
+Accept: application/json
+
+###
+
+# DELETE COMMENT
+DELETE {{base-url}}/articles/my-puupy-2/comments/3
 Authorization: Token {{auth_token}}
 
 ###

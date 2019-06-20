@@ -15,7 +15,7 @@ object DatabaseFactory {
     fun init() {
         Database.connect(hikari())
         transaction {
-            create(Users, Followings, Articles, Tags, ArticleTags, FavoriteArticle)
+            create(Users, Followings, Articles, Tags, ArticleTags, FavoriteArticle, Comments, ArticleComment)
 
             //NOTE: Insert initial rows if any here
         }

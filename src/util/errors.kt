@@ -10,3 +10,5 @@ class UserExists : RuntimeException()
 class UserDoesNotExists : RuntimeException()
 
 class ArticleDoesNotExist(val slug: String) : RuntimeException()
+
+class CommentNotFound() : RuntimeException()
