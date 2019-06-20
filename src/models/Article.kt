@@ -50,7 +50,9 @@ class Tag(id: EntityID<UUID>) : UUIDEntity(id) {
 }
 
 class Article(id: EntityID<UUID>) : UUIDEntity(id) {
-    companion object : UUIDEntityClass<Article>(Articles)
+    companion object : UUIDEntityClass<Article>(Articles) {
+        fun generateSlug(title: String) = title.toLowerCase().replace(" ", "-")
+    }
 
     var slug by Articles.slug
     var title by Articles.title

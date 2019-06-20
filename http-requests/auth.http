@@ -12,8 +12,8 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "drag2@gmail.com",
-    "username": "drag2",
+    "email": "drag1@gmail.com",
+    "username": "drag1",
     "password": "1234"
   }
 }
@@ -38,7 +38,7 @@ Content-Type: application/json
 
 {
   "user": {
-    "email": "drag1@gmail.com",
+    "email": "drag2@gmail.com",
     "password": "1234"
   }
 }
@@ -71,13 +71,13 @@ Accept: application/json
 ###
 
 # GET PROFILE - NOT AUTHENTICATED
-GET {{base-url}}/profiles/drag3
+GET {{base-url}}/profiles/drag2
 Accept: application/json
 
 ###
 
 # GET PROFILE - AUTHENTICATED
-GET {{base-url}}/profiles/drag1
+GET {{base-url}}/profiles/drag2
 Accept: application/json
 Authorization: Token {{auth_token}}
 
@@ -91,7 +91,7 @@ Authorization: Token {{auth_token}}
 ###
 
 # UNFOLLOW USER
-DELETE {{base-url}}/profiles/drag3/follow
+DELETE {{base-url}}/profiles/drag1/follow
 Accept: application/json
 Authorization: Token {{auth_token}}
 
@@ -129,7 +129,7 @@ GET {{base-url}}/drop
 ###
 
 # UPDATE ARTICLE
-PUT {{base-url}}/articles/how-to-train-your-dragon-2
+PUT {{base-url}}/articles/my-puupy-2
 Accept: application/json
 Content-Type: application/json
 Authorization: Token {{auth_token}}
@@ -145,14 +145,14 @@ Authorization: Token {{auth_token}}
 ###
 
 # FAVORITE ARTICLE
-POST {{base-url}}/articles/my-puupy/favorite
+POST {{base-url}}/articles/my-puupy-2/favorite
 Accept: application/json
 Authorization: Token {{auth_token}}
 
 ###
 
 # UN-FAVORITE ARTICLE
-DELETE {{base-url}}/articles/my-puupy/favorite
+DELETE {{base-url}}/articles/my-puupy-2/favorite
 Accept: application/json
 Authorization: Token {{auth_token}}
 
@@ -205,7 +205,7 @@ Accept: application/json
 ###
 
 # GET COMMENTS - UN-AUTHORIZED
-GET {{base-url}}/articles/my-puupy/comments
+GET {{base-url}}/articles/my-puupy-2/comments
 Accept: application/json
 
 ###

@@ -28,13 +28,13 @@ fun Route.profile(profileService: ProfileService) {
         post("/profiles/{username}/follow") {
             val username = call.param("username")
             val currentUserId = call.userId()
-            val profile = profileService.followUser(username, currentUserId)
+            val profile = profileService.changeFollowStatus(username, currentUserId, true)
             call.respond(profile)
         }
         delete("/profiles/{username}/follow") {
             val username = call.param("username")
             val currentUserId = call.userId()
-            val profile = profileService.unfollowUser(username, currentUserId)
+            val profile = profileService.changeFollowStatus(username, currentUserId, false)
             call.respond(profile)
         }
     }

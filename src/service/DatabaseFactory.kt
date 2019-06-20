@@ -37,6 +37,6 @@ object DatabaseFactory {
     }
 
     suspend fun drop() {
-        dbQuery { drop(Users, Followings, Articles, Tags, ArticleTags, FavoriteArticle) }
+        dbQuery { drop(Users, Followings, Articles, Tags, ArticleTags, FavoriteArticle, Comments, ArticleComment) }
     }
 }

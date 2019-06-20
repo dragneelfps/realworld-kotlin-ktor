@@ -16,7 +16,7 @@ object Users : UUIDTable() {
 
 object Followings : UUIDTable() {
     val userId = reference("userId", Users)
-    val following = reference("followingId", Users)
+    val followerId = reference("followerId", Users)
 }
 
 class User(id: EntityID<UUID>) : UUIDEntity(id) {
@@ -27,7 +27,7 @@ class User(id: EntityID<UUID>) : UUIDEntity(id) {
     var bio by Users.bio
     var image by Users.image
     var password by Users.password
-    var followings by User.via(Followings.userId, Followings.following)
+    var followers by User.via(Followings.userId, Followings.followerId)
 }
 
 data class RegisterUser(val user: RegisterUser.User) {

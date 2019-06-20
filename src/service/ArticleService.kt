@@ -16,7 +16,7 @@ class ArticleService {
             val user = getUser(userId)
             val article = Article.new {
                 title = newArticle.article.title
-                slug = newArticle.article.title.toLowerCase().replace(" ", "-")
+                slug = Article.generateSlug(newArticle.article.title)
                 description = newArticle.article.description
                 body = newArticle.article.body
                 author = user.id
@@ -33,7 +33,7 @@ class ArticleService {
             val article = getArticleBySlug(slug)
             if (!isArticleAuthor(article, user)) throw AuthorizationException()
             if (updateArticle.article.title != null) {
-                article.slug = updateArticle.article.title.toLowerCase().replace(" ", "-")
+                article.slug = Article.generateSlug(updateArticle.article.title)
                 article.title = updateArticle.article.title
                 article.updatedAt = DateTime.now()
             }
@@ -62,7 +62,7 @@ class ArticleService {
                 currentUser = user,
                 limit = filter["limit"]?.toInt() ?: 20,
                 offset = filter["offset"]?.toInt() ?: 0,
-                followedBy = true
+                follows = true
             )
         }
     }
@@ -103,7 +103,7 @@ class ArticleService {
         favoritedByUserName: String? = null,
         limit: Int = 20,
         offset: Int = 0,
-        followedBy: Boolean = false
+        follows: Boolean = false
     ): List<ArticleResponse.Article> {
         val author = if (authorUserName != null) getUserByUsername(authorUserName) else null
         val articles = Article.find {
@@ -112,7 +112,7 @@ class ArticleService {
         val filteredArticles = articles.filter { article ->
             if (favoritedByUserName != null) {
                 val favoritedByUser = getUserByUsername(favoritedByUserName)
-                article.favoritedBy.any { it == favoritedByUser }
+                isFavoritedArticle(article, favoritedByUser)
             } else {
                 true
             }
@@ -123,9 +123,9 @@ class ArticleService {
                         true
                     }
                     &&
-                    if (followedBy) {
+                    if (follows) {
                         val articleAuthor = getUser(article.author.toString())
-                        articleAuthor.followings.any { it == currentUser!! }
+                        isFollower(articleAuthor, currentUser)
                     } else {
                         true
                     }
@@ -136,17 +136,20 @@ class ArticleService {
     }
 
     private fun favoriteArticle(article: Article, user: User) {
-        if (article.favoritedBy.none { it == user }) {
+        if (!isFavoritedArticle(article, user)) {
             article.favoritedBy = SizedCollection(article.favoritedBy.plus(user))
         }
     }
 
     private fun unfavoriteArticle(article: Article, user: User) {
-        if (article.favoritedBy.any { it == user }) {
+        if (isFavoritedArticle(article, user)) {
             article.favoritedBy = SizedCollection(article.favoritedBy.minus(user))
         }
     }
 }
+
+fun isFavoritedArticle(article: Article, user: User?) =
+    if (user != null) article.favoritedBy.any { it == user } else false
 
 fun getArticleBySlug(slug: String) =
     Article.find { Articles.slug eq slug }.firstOrNull() ?: throw ArticleDoesNotExist(slug)
@@ -158,9 +161,8 @@ fun getArticleResponse(article: Article, currentUser: User? = null): ArticleResp
     val author = getUser(article.author.toString())
     val tagList = article.tags.map { it.tag }
     val favoriteCount = article.favoritedBy.count()
-    val favorited =
-        if (currentUser != null) article.favoritedBy.any { it == currentUser } else false
-    val following = author.followings.any { it == currentUser }
+    val favorited = isFavoritedArticle(article, currentUser)
+    val following = isFollower(author, currentUser)
     val authorProfile = getProfileByUser(getUser(article.author.toString()), following).profile!!
     return ArticleResponse(
         article = ArticleResponse.Article(

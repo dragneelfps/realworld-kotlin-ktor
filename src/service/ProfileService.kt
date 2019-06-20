@@ -11,30 +11,39 @@ class ProfileService() {
             val toUser = getUserByUsername(username)
             currentUserId ?: return@dbQuery getProfileByUser(toUser)
             val fromUser = getUser(currentUserId)
-            val follows = fromUser.followings.any { it.id == toUser.id }
+            val follows = isFollower(toUser, fromUser)
             getProfileByUser(toUser, follows)
         }
     }
 
-    suspend fun followUser(toUserName: String, fromUserId: String): ProfileResponse {
+    suspend fun changeFollowStatus(toUserName: String, fromUserId: String, follow: Boolean): ProfileResponse {
         dbQuery {
             val toUser = getUserByUsername(toUserName)
             val fromUser = getUser(fromUserId)
-            fromUser.followings = SizedCollection(fromUser.followings.plus(toUser).toList())
+            if (follow) {
+                addFollower(toUser, fromUser)
+            } else {
+                removeFollower(toUser, fromUser)
+            }
         }
         return getProfile(toUserName, fromUserId)
     }
 
-    suspend fun unfollowUser(toUserName: String, fromUserId: String): ProfileResponse {
-        dbQuery {
-            val toUser = getUserByUsername(toUserName)
-            val fromUser = getUser(fromUserId)
-            fromUser.followings = SizedCollection(fromUser.followings.minus(toUser).toList())
+    private fun addFollower(user: User, newFollower: User) {
+        if (!isFollower(user, newFollower)) {
+            user.followers = SizedCollection(user.followers.plus(newFollower))
         }
-        return getProfile(toUserName, fromUserId)
+    }
+
+    private fun removeFollower(user: User, newFollower: User) {
+        if (isFollower(user, newFollower)) {
+            user.followers = SizedCollection(user.followers.minus(newFollower))
+        }
     }
 
 }
+
+fun isFollower(user: User, follower: User?) = if (follower != null) user.followers.any { it == follower } else false
 
 fun getProfileByUser(user: User, following: Boolean = false) =
     ProfileResponse(profile = user.run { ProfileResponse.Profile(username, bio, image, following) })

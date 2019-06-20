@@ -45,7 +45,7 @@ class CommentService {
 fun getCommentResponse(comment: Comment, userId: String?): CommentResponse {
     val author = getUser(comment.author.toString())
     val currentUser = if (userId != null) getUser(userId) else null
-    val following = if (currentUser != null) currentUser.followings.any { it == author } else false
+    val following = isFollower(author, currentUser)
     val authorProfile = getProfileByUser(author, following)
     return CommentResponse(
         comment = CommentResponse.Comment(
