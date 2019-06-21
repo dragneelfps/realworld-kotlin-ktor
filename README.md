@@ -14,18 +14,21 @@ For more information on how to this works with other frontends/backends, head ov
 
 # How it works
 
-- Uses h2 as database backend
-- jwt for token creation
+- [h2](https://h2database.com/html/main.html) database
+- [hikari](https://github.com/brettwooldridge/HikariCP) as JDBC connection pool
+- [Exposed](https://github.com/JetBrains/Exposed/) as Kotlin SQL Framework
+- [Jackson](https://github.com/FasterXML/jackson) for handling JSON
 
 # Getting started
 
-> Use IntelliJ IDEA :p
+> Installation
 
-# Status
+1. Install h2 database. Default configuration uses server mode.
+2. Run the gradle. :)
 
-- Auth
-- Profile
-- Articles
+> Running
 
-
-
+1. Start the h2 database
+2. Run the gradle. :))
+3. Check on [http://localhost:8080/api](http:localhost:8080/api), if using default configuration. 
+4. Yay.
