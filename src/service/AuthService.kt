@@ -54,7 +54,7 @@ class AuthService {
 
     suspend fun updateUser(userId: String, updateUser: UpdateUser): User {
         return dbQuery {
-            val user = User.find { Users.email eq userId }.firstOrNull() ?: throw UserDoesNotExists()
+            val user = getUser(userId)
             user.apply {
                 email = updateUser.user.email ?: email
                 password = updateUser.user.password ?: password
