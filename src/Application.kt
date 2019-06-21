@@ -15,9 +15,9 @@ import io.ktor.application.install
 import io.ktor.auth.Authentication
 import io.ktor.auth.UserIdPrincipal
 import io.ktor.auth.jwt.jwt
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.StatusPages
+import io.ktor.features.*
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.jackson.jackson
 import io.ktor.response.respond
@@ -25,12 +25,29 @@ import io.ktor.routing.get
 import io.ktor.routing.route
 import io.ktor.routing.routing
 import org.slf4j.event.Level
+import java.time.Duration
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
 
     val simpleJWT = SimpleJWT("my-secret")
+
+    install(DefaultHeaders)
+    install(CORS) {
+        method(HttpMethod.Options)
+        method(HttpMethod.Get)
+        method(HttpMethod.Post)
+        method(HttpMethod.Put)
+        method(HttpMethod.Delete)
+        header(HttpHeaders.AccessControlAllowHeaders)
+        header(HttpHeaders.AccessControlAllowOrigin)
+        header(HttpHeaders.Authorization)
+        allowCredentials = true
+        allowSameOrigin = true
+        anyHost()
+        maxAge = Duration.ofDays(1)
+    }
 
     install(CallLogging) {
         level = Level.INFO
