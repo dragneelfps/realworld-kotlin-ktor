@@ -98,4 +98,6 @@ data class ArticleResponse(val article: ArticleResponse.Article) {
     )
 }
 
+data class MultipleArticlesResponse(val articles: List<ArticleResponse.Article>, val articlesCount: Int)
+
 data class TagResponse(val tags: List<String>)

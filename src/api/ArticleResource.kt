@@ -1,5 +1,6 @@
 package com.nooblabs.api
 
+import com.nooblabs.models.MultipleArticlesResponse
 import com.nooblabs.models.NewArticle
 import com.nooblabs.models.UpdateArticle
 import com.nooblabs.service.ArticleService
@@ -29,7 +30,7 @@ fun Route.article(articleService: ArticleService) {
                 "offset" to params["offset"]
             )
             val articles = articleService.getFeedArticles(call.userId(), filter)
-            call.respond(mapOf("articles" to articles))
+            call.respond(MultipleArticlesResponse(articles, articles.size))
         }
 
         /*
@@ -100,9 +101,8 @@ fun Route.article(articleService: ArticleService) {
                 "limit" to params["limit"],
                 "offset" to params["offset"]
             )
-            call.application.environment.log.debug(filter.toString())
             val articles = articleService.getArticles(userId, filter)
-            call.respond(mapOf("articles" to articles))
+            call.respond(MultipleArticlesResponse(articles, articles.size))
         }
 
     }
