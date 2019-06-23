@@ -12,6 +12,9 @@ We've gone to great lengths to adhere to the **[Kotlin-Ktor](https://github.com/
 
 For more information on how to this works with other frontends/backends, head over to the [RealWorld](https://github.com/gothinkster/realworld) repo.
 
+# Build Status
+[![Build Status](https://travis-ci.org/dragneelfps/realworld-kotlin-ktor.svg?branch=master)](https://travis-ci.org/dragneelfps/realworld-kotlin-ktor)
+
 # How it works
 
 - [h2](https://h2database.com/html/main.html) database
