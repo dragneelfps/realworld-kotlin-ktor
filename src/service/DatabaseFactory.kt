@@ -24,7 +24,8 @@ object DatabaseFactory {
     private fun hikari(): HikariDataSource {
         val config = HikariConfig().apply {
             driverClassName = "org.h2.Driver"
-            jdbcUrl = "jdbc:h2:tcp://localhost/~/realworldtest"
+//            jdbcUrl = "jdbc:h2:tcp://localhost/~/realworldtest"
+            jdbcUrl = "jdbc:h2:mem:~realworldtest"
             maximumPoolSize = 3
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"
