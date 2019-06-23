@@ -4,5 +4,9 @@ jdk:
 before_install:
   - chmod +x gradlew
   - chmod +x gradle/wrapper/gradle-wrapper.jar
+  - chmod +x postman_tests/run-api-tests.sh
 script:
   - ./gradlew test build
+  - ./gradlew run
+  - ./postman_tests/run-api-tests.sh
+  - ./gradlew --stop
