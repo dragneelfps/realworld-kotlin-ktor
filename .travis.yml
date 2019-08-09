@@ -7,6 +7,6 @@ before_install:
   - chmod +x postman_tests/run-api-tests.sh
 script:
   - ./gradlew test build
-  - ./gradlew run
+  - ./gradlew run &
   - ./postman_tests/run-api-tests.sh
   - ./gradlew --stop
