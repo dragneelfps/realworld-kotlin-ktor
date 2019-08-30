@@ -35,3 +35,6 @@ For more information on how to this works with other frontends/backends, head ov
 2. Run the gradle. :))
 3. Check on [http://localhost:8080/api](http:localhost:8080/api), if using default configuration. 
 4. Yay.
+
+> Testing
+1. ./gradlew build test
