@@ -1,0 +1,14 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Test
+      uses: MrRamych/gradle-actions/openjdk-8@2.1
+      with:
+        args: test
