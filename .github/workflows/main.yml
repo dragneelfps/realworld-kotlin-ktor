@@ -21,3 +21,11 @@ jobs:
       run: chmod +x gradlew
     - name: Build with Gradle
       run: ./gradlew build test
+    - name: Integration tests
+      env:
+        APIURL:  http://localhost:8080/api
+      run: |
+        chmod +x postman_tests/run-api-tests.sh
+        ./gradlew run &
+        ./postman_tests/run-api-tests.sh
+        ./gradlew --stop
