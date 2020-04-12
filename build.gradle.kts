@@ -13,7 +13,7 @@ tasks.withType<KotlinCompile>() {
 }
 
 group = "realworld"
-version = "0.0.1"
+version = project.properties["version"] ?: "private"
 
 application {
     mainClassName = "io.ktor.server.netty.EngineMain"
