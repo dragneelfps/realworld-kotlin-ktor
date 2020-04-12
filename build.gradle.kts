@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     application
     kotlin("jvm") version kotlinVersion
+    id("net.researchgate.release") version "2.6.0"
 }
 
 tasks.withType<KotlinCompile>() {
