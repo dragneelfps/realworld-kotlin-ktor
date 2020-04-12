@@ -29,3 +29,5 @@ jobs:
         ./gradlew run &
         ./postman_tests/run-api-tests.sh
         ./gradlew --stop
+    - name: Release
+      run: ./gradlew release -Prelease.useAutomaticVersion=true
