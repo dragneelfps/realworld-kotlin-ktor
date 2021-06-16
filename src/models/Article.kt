@@ -1,13 +1,15 @@
 package com.nooblabs.models
 
-import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
-import org.jetbrains.exposed.dao.UUIDTable
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
-import org.joda.time.DateTime
-import java.util.*
+import org.jetbrains.exposed.sql.`java-time`.timestamp
+import java.time.Instant
+import java.util.Locale
+import java.util.UUID
 
 object Articles : UUIDTable() {
     val slug = varchar("slug", 255)
@@ -15,8 +17,8 @@ object Articles : UUIDTable() {
     val description = varchar("description", 255)
     val body = varchar("body", 255)
     val author = reference("author", Users)
-    val createdAt = datetime("createdAt").default(DateTime.now())
-    val updatedAt = datetime("updatedAt").default(DateTime.now())
+    val createdAt = timestamp("createdAt").default(Instant.now())
+    val updatedAt = timestamp("updatedAt").default(Instant.now())
 }
 
 object Tags : UUIDTable() {
@@ -29,18 +31,22 @@ object ArticleTags : Table() {
         Articles,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
-    ).primaryKey(0)
+    )
     val tag = reference(
         "tag",
         Tags,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
-    ).primaryKey(1)
+    )
+
+    override val primaryKey = PrimaryKey(article, tag)
 }
 
 object FavoriteArticle : Table() {
-    val article = reference("article", Articles).primaryKey(0)
-    val user = reference("user", Users).primaryKey(1)
+    val article = reference("article", Articles)
+    val user = reference("user", Users)
+
+    override val primaryKey = PrimaryKey(article, user)
 }
 
 class Tag(id: EntityID<UUID>) : UUIDEntity(id) {
@@ -51,7 +57,7 @@ class Tag(id: EntityID<UUID>) : UUIDEntity(id) {
 
 class Article(id: EntityID<UUID>) : UUIDEntity(id) {
     companion object : UUIDEntityClass<Article>(Articles) {
-        fun generateSlug(title: String) = title.toLowerCase().replace(" ", "-")
+        fun generateSlug(title: String) = title.lowercase(Locale.US).replace(" ", "-")
     }
 
     var slug by Articles.slug
@@ -66,7 +72,7 @@ class Article(id: EntityID<UUID>) : UUIDEntity(id) {
     var comments by Comment via ArticleComment
 }
 
-data class NewArticle(val article: NewArticle.Article) {
+data class NewArticle(val article: Article) {
     data class Article(
         val title: String,
         val description: String,
@@ -75,7 +81,7 @@ data class NewArticle(val article: NewArticle.Article) {
     )
 }
 
-data class UpdateArticle(val article: UpdateArticle.Article) {
+data class UpdateArticle(val article: Article) {
     data class Article(
         val title: String? = null,
         val description: String? = null,
@@ -83,7 +89,7 @@ data class UpdateArticle(val article: UpdateArticle.Article) {
     )
 }
 
-data class ArticleResponse(val article: ArticleResponse.Article) {
+data class ArticleResponse(val article: Article) {
     data class Article(
         val slug: String,
         val title: String,

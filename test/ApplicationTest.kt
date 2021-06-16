@@ -7,7 +7,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.server.testing.handleRequest
 import io.ktor.server.testing.setBody
 import io.ktor.server.testing.withTestApplication
-import org.joda.time.DateTime
+import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
@@ -16,7 +16,7 @@ import kotlin.test.assertTrue
 class ApplicationTest {
 
     companion object {
-        private val username = "u${DateTime.now().millis}"
+        private val username = "u${LocalDateTime.now().nano}"
         private val email = "$username@mail.com"
         private val password = "pass1234"
     }

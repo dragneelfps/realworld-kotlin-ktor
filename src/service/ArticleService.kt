@@ -1,13 +1,21 @@
 package com.nooblabs.service
 
-import com.nooblabs.models.*
+import com.nooblabs.models.Article
+import com.nooblabs.models.ArticleResponse
+import com.nooblabs.models.Articles
+import com.nooblabs.models.NewArticle
+import com.nooblabs.models.Tag
+import com.nooblabs.models.TagResponse
+import com.nooblabs.models.Tags
+import com.nooblabs.models.UpdateArticle
+import com.nooblabs.models.User
 import com.nooblabs.service.DatabaseFactory.dbQuery
 import com.nooblabs.util.ArticleDoesNotExist
 import com.nooblabs.util.AuthorizationException
 import org.jetbrains.exposed.sql.Op
 import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.SortOrder
-import org.joda.time.DateTime
+import java.time.Instant
 
 class ArticleService {
 
@@ -35,7 +43,7 @@ class ArticleService {
             if (updateArticle.article.title != null) {
                 article.slug = Article.generateSlug(updateArticle.article.title)
                 article.title = updateArticle.article.title
-                article.updatedAt = DateTime.now()
+                article.updatedAt = Instant.now()
             }
             getArticleResponse(article, user)
         }
@@ -115,7 +123,7 @@ class ArticleService {
         val author = if (authorUserName != null) getUserByUsername(authorUserName) else null
         val articles = Article.find {
             if (author != null) (Articles.author eq author.id) else Op.TRUE
-        }.limit(limit, offset).orderBy(Articles.createdAt to SortOrder.DESC)
+        }.limit(limit, offset.toLong()).orderBy(Articles.createdAt to SortOrder.DESC)
         val filteredArticles = articles.filter { article ->
             if (favoritedByUserName != null) {
                 val favoritedByUser = getUserByUsername(favoritedByUserName)
@@ -181,7 +189,7 @@ fun getArticleResponse(article: Article, currentUser: User? = null): ArticleResp
             createdAt = article.createdAt.toString(),
             updatedAt = article.updatedAt.toString(),
             favorited = favorited,
-            favoritesCount = favoriteCount,
+            favoritesCount = favoriteCount.toInt(),
             author = authorProfile
         )
     )
