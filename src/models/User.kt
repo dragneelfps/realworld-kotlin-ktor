@@ -1,10 +1,10 @@
 package com.nooblabs.models
 
-import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.UUIDEntity
 import org.jetbrains.exposed.dao.UUIDEntityClass
-import org.jetbrains.exposed.dao.UUIDTable
-import java.util.*
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.UUIDTable
+import java.util.UUID
 
 object Users : UUIDTable() {
     val email = varchar("email", 255).uniqueIndex()
@@ -30,15 +30,15 @@ class User(id: EntityID<UUID>) : UUIDEntity(id) {
     var followers by User.via(Followings.userId, Followings.followerId)
 }
 
-data class RegisterUser(val user: RegisterUser.User) {
+data class RegisterUser(val user: User) {
     data class User(val email: String, val username: String, val password: String)
 }
 
-data class LoginUser(val user: LoginUser.User) {
+data class LoginUser(val user: User) {
     data class User(val email: String, val password: String)
 }
 
-data class UpdateUser(val user: UpdateUser.User) {
+data class UpdateUser(val user: User) {
     data class User(
         val email: String? = null,
         val username: String? = null,
@@ -48,7 +48,7 @@ data class UpdateUser(val user: UpdateUser.User) {
     )
 }
 
-data class UserResponse(val user: UserResponse.User) {
+data class UserResponse(val user: User) {
     data class User(
         val email: String,
         val token: String = "",

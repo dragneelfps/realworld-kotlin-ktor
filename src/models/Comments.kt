@@ -1,16 +1,17 @@
 package com.nooblabs.models
 
-import org.jetbrains.exposed.dao.EntityID
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
-import org.jetbrains.exposed.dao.IntIdTable
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
-import org.joda.time.DateTime
+import org.jetbrains.exposed.sql.`java-time`.timestamp
+import java.time.Instant
 
 object Comments : IntIdTable() {
-    val createdAt = datetime("createdAt").default(DateTime.now())
-    val updatedAt = datetime("updatedAt").default(DateTime.now())
+    val createdAt = timestamp("createdAt").default(Instant.now())
+    val updatedAt = timestamp("updatedAt").default(Instant.now())
     val body = text("body")
     val author = reference("author", Users, onUpdate = ReferenceOption.CASCADE, onDelete = ReferenceOption.CASCADE)
 }
@@ -20,12 +21,13 @@ object ArticleComment : Table() {
         "article", Articles,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
-    ).primaryKey(0)
+    )
     val comment = reference(
         "comment", Comments,
         onDelete = ReferenceOption.CASCADE,
         onUpdate = ReferenceOption.CASCADE
-    ).primaryKey(1)
+    )
+    override val primaryKey = PrimaryKey(article, comment)
 }
 
 class Comment(id: EntityID<Int>) : IntEntity(id) {
@@ -37,7 +39,7 @@ class Comment(id: EntityID<Int>) : IntEntity(id) {
     var author by Comments.author
 }
 
-data class CommentResponse(val comment: CommentResponse.Comment) {
+data class CommentResponse(val comment: Comment) {
     data class Comment(
         val id: Int,
         val createdAt: String,
@@ -47,6 +49,6 @@ data class CommentResponse(val comment: CommentResponse.Comment) {
     )
 }
 
-data class PostComment(val comment: PostComment.Comment) {
+data class PostComment(val comment: Comment) {
     data class Comment(val body: String)
 }

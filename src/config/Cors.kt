@@ -4,8 +4,8 @@ import io.ktor.features.CORS
 import io.ktor.features.maxAgeDuration
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
+import kotlin.time.Duration
 import kotlin.time.ExperimentalTime
-import kotlin.time.days
 
 @OptIn(ExperimentalTime::class)
 fun CORS.Configuration.cors() {
@@ -20,5 +20,5 @@ fun CORS.Configuration.cors() {
     allowCredentials = true
     allowSameOrigin = true
     anyHost()
-    maxAgeDuration = 1.days
+    maxAgeDuration = Duration.days(1)
 }

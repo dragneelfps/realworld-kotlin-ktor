@@ -15,7 +15,7 @@ group = "realworld"
 version = "0.0.1"
 
 application {
-    mainClassName = "io.ktor.server.netty.EngineMain"
+    mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
 kotlin.sourceSets["main"].kotlin.srcDirs("src")
@@ -25,8 +25,7 @@ sourceSets["main"].resources.srcDirs("resources")
 sourceSets["test"].resources.srcDirs("testresources")
 
 repositories {
-    mavenLocal()
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
@@ -37,7 +36,10 @@ dependencies {
     implementation(Deps.ktorJackson)
 
     implementation(Deps.h2Database)
-    implementation(Deps.exposed)
+    implementation(Deps.exposedCore)
+    implementation(Deps.exposedDao)
+    implementation(Deps.exposedJdbc)
+    implementation(Deps.exposedJavaTime)
     implementation(Deps.hikari)
 
     testImplementation(Deps.ktorTests)
