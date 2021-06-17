@@ -4,7 +4,7 @@ import com.nooblabs.models.LoginUser
 import com.nooblabs.models.RegisterUser
 import com.nooblabs.models.UpdateUser
 import com.nooblabs.models.UserResponse
-import com.nooblabs.service.AuthService
+import com.nooblabs.service.IAuthService
 import com.nooblabs.util.SimpleJWT
 import com.nooblabs.util.userId
 import io.ktor.application.call
@@ -16,7 +16,7 @@ import io.ktor.routing.get
 import io.ktor.routing.post
 import io.ktor.routing.put
 
-fun Route.auth(authService: AuthService, simpleJWT: SimpleJWT) {
+fun Route.auth(authService: IAuthService, simpleJWT: SimpleJWT) {
 
     /*
         Registration:

@@ -1,6 +1,6 @@
 package com.nooblabs.api
 
-import com.nooblabs.service.ProfileService
+import com.nooblabs.service.IProfileService
 import com.nooblabs.util.param
 import com.nooblabs.util.userId
 import io.ktor.application.call
@@ -13,7 +13,7 @@ import io.ktor.routing.delete
 import io.ktor.routing.get
 import io.ktor.routing.post
 
-fun Route.profile(profileService: ProfileService) {
+fun Route.profile(profileService: IProfileService) {
 
     authenticate(optional = true) {
 

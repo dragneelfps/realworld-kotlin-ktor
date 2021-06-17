@@ -9,7 +9,6 @@ import com.nooblabs.models.TagResponse
 import com.nooblabs.models.Tags
 import com.nooblabs.models.UpdateArticle
 import com.nooblabs.models.User
-import com.nooblabs.service.DatabaseFactory.dbQuery
 import com.nooblabs.util.ArticleDoesNotExist
 import com.nooblabs.util.AuthorizationException
 import org.jetbrains.exposed.sql.Op
@@ -17,10 +16,28 @@ import org.jetbrains.exposed.sql.SizedCollection
 import org.jetbrains.exposed.sql.SortOrder
 import java.time.Instant
 
-class ArticleService {
+interface IArticleService {
+    suspend fun createArticle(userId: String, newArticle: NewArticle): ArticleResponse
 
-    suspend fun createArticle(userId: String, newArticle: NewArticle): ArticleResponse {
-        return dbQuery {
+    suspend fun updateArticle(userId: String, slug: String, updateArticle: UpdateArticle): ArticleResponse
+
+    suspend fun getArticle(slug: String): ArticleResponse
+
+    suspend fun getArticles(userId: String? = null, filter: Map<String, String?>): List<ArticleResponse.Article>
+
+    suspend fun getFeedArticles(userId: String, filter: Map<String, String?>): List<ArticleResponse.Article>
+
+    suspend fun changeFavorite(userId: String, slug: String, favorite: Boolean): ArticleResponse
+
+    suspend fun deleteArticle(userId: String, slug: String)
+
+    suspend fun getAllTags(): TagResponse
+}
+
+class ArticleService(private val databaseFactory: IDatabaseFactory) : IArticleService {
+
+    override suspend fun createArticle(userId: String, newArticle: NewArticle): ArticleResponse {
+        return databaseFactory.dbQuery {
             val user = getUser(userId)
             val article = Article.new {
                 title = newArticle.article.title
@@ -35,8 +52,8 @@ class ArticleService {
         }
     }
 
-    suspend fun updateArticle(userId: String, slug: String, updateArticle: UpdateArticle): ArticleResponse {
-        return dbQuery {
+    override suspend fun updateArticle(userId: String, slug: String, updateArticle: UpdateArticle): ArticleResponse {
+        return databaseFactory.dbQuery {
             val user = getUser(userId)
             val article = getArticleBySlug(slug)
             if (!isArticleAuthor(article, user)) throw AuthorizationException()
@@ -49,15 +66,15 @@ class ArticleService {
         }
     }
 
-    suspend fun getArticle(slug: String): ArticleResponse {
-        return dbQuery {
+    override suspend fun getArticle(slug: String): ArticleResponse {
+        return databaseFactory.dbQuery {
             val article = getArticleBySlug(slug)
             getArticleResponse(article)
         }
     }
 
-    suspend fun getArticles(userId: String? = null, filter: Map<String, String?>): List<ArticleResponse.Article> {
-        return dbQuery {
+    override suspend fun getArticles(userId: String?, filter: Map<String, String?>): List<ArticleResponse.Article> {
+        return databaseFactory.dbQuery {
             val user = if (userId != null) getUser(userId) else null
             getAllArticles(
                 currentUser = user,
@@ -70,8 +87,8 @@ class ArticleService {
         }
     }
 
-    suspend fun getFeedArticles(userId: String, filter: Map<String, String?>): List<ArticleResponse.Article> {
-        return dbQuery {
+    override suspend fun getFeedArticles(userId: String, filter: Map<String, String?>): List<ArticleResponse.Article> {
+        return databaseFactory.dbQuery {
             val user = getUser(userId)
             getAllArticles(
                 currentUser = user,
@@ -82,8 +99,8 @@ class ArticleService {
         }
     }
 
-    suspend fun changeFavorite(userId: String, slug: String, favorite: Boolean): ArticleResponse {
-        return dbQuery {
+    override suspend fun changeFavorite(userId: String, slug: String, favorite: Boolean): ArticleResponse {
+        return databaseFactory.dbQuery {
             val user = getUser(userId)
             val article = getArticleBySlug(slug)
             if (favorite) {
@@ -95,8 +112,8 @@ class ArticleService {
         }
     }
 
-    suspend fun deleteArticle(userId: String, slug: String) {
-        dbQuery {
+    override suspend fun deleteArticle(userId: String, slug: String) {
+        databaseFactory.dbQuery {
             val user = getUser(userId)
             val article = getArticleBySlug(slug)
             if (!isArticleAuthor(article, user)) throw AuthorizationException()
@@ -104,8 +121,8 @@ class ArticleService {
         }
     }
 
-    suspend fun getAllTags(): TagResponse {
-        return dbQuery {
+    override suspend fun getAllTags(): TagResponse {
+        return databaseFactory.dbQuery {
             val tags = Tag.all().map { it.tag }
             TagResponse(tags)
         }

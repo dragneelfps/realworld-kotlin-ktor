@@ -1,7 +1,7 @@
 package com.nooblabs.api
 
 import com.nooblabs.models.PostComment
-import com.nooblabs.service.CommentService
+import com.nooblabs.service.ICommentService
 import com.nooblabs.util.param
 import com.nooblabs.util.userId
 import io.ktor.application.call
@@ -16,7 +16,7 @@ import io.ktor.routing.delete
 import io.ktor.routing.get
 import io.ktor.routing.post
 
-fun Route.comment(commentService: CommentService) {
+fun Route.comment(commentService: ICommentService) {
 
     authenticate {
 

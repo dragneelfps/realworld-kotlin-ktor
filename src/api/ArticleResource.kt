@@ -3,7 +3,7 @@ package com.nooblabs.api
 import com.nooblabs.models.MultipleArticlesResponse
 import com.nooblabs.models.NewArticle
 import com.nooblabs.models.UpdateArticle
-import com.nooblabs.service.ArticleService
+import com.nooblabs.service.IArticleService
 import com.nooblabs.util.param
 import com.nooblabs.util.userId
 import io.ktor.application.call
@@ -13,9 +13,13 @@ import io.ktor.auth.principal
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.receive
 import io.ktor.response.respond
-import io.ktor.routing.*
+import io.ktor.routing.Route
+import io.ktor.routing.delete
+import io.ktor.routing.get
+import io.ktor.routing.post
+import io.ktor.routing.put
 
-fun Route.article(articleService: ArticleService) {
+fun Route.article(articleService: IArticleService) {
 
     authenticate {
 
