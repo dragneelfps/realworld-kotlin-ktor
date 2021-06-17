@@ -21,6 +21,7 @@ For more information on how to this works with other frontends/backends, head ov
 - [hikari](https://github.com/brettwooldridge/HikariCP) as JDBC connection pool
 - [Exposed](https://github.com/JetBrains/Exposed/) as Kotlin SQL Framework
 - [Jackson](https://github.com/FasterXML/jackson) for handling JSON
+- [Koin](https://insert-koin.io/) for dependency injection
 
 # Getting started
 

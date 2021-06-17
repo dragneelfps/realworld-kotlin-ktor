@@ -3,15 +3,22 @@ package com.nooblabs.service
 import com.nooblabs.models.Comment
 import com.nooblabs.models.CommentResponse
 import com.nooblabs.models.PostComment
-import com.nooblabs.service.DatabaseFactory.dbQuery
 import com.nooblabs.util.AuthorizationException
 import com.nooblabs.util.CommentNotFound
 import org.jetbrains.exposed.sql.SizedCollection
 
-class CommentService {
+interface ICommentService {
+    suspend fun addComment(userId: String, slug: String, postComment: PostComment): CommentResponse
 
-    suspend fun addComment(userId: String, slug: String, postComment: PostComment): CommentResponse {
-        return dbQuery {
+    suspend fun getComments(userId: String?, slug: String): List<CommentResponse.Comment>
+
+    suspend fun deleteComment(userId: String, slug: String, commentId: Int)
+}
+
+class CommentService(private val databaseFactory: IDatabaseFactory) : ICommentService {
+
+    override suspend fun addComment(userId: String, slug: String, postComment: PostComment): CommentResponse {
+        return databaseFactory.dbQuery {
             val user = getUser(userId)
             val article = getArticleBySlug(slug)
             val comment = Comment.new {
@@ -23,15 +30,15 @@ class CommentService {
         }
     }
 
-    suspend fun getComments(userId: String?, slug: String): List<CommentResponse.Comment> {
-        return dbQuery {
+    override suspend fun getComments(userId: String?, slug: String): List<CommentResponse.Comment> {
+        return databaseFactory.dbQuery {
             val article = getArticleBySlug(slug)
             article.comments.map { comment -> getCommentResponse(comment, userId).comment }
         }
     }
 
-    suspend fun deleteComment(userId: String, slug: String, commentId: Int) {
-        dbQuery {
+    override suspend fun deleteComment(userId: String, slug: String, commentId: Int) {
+        databaseFactory.dbQuery {
             val user = getUser(userId)
             val article = getArticleBySlug(slug)
             val comment = getCommentById(commentId)

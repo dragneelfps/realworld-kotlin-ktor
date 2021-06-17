@@ -4,6 +4,7 @@ const val logbackVersion = "1.2.3"
 const val h2Version = "1.4.200"
 const val exposedVersion = "0.32.1"
 const val hikariVersion = "4.0.3"
+const val koinVersion = "3.1.0"
 
 object Deps {
     const val kotlinLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -21,4 +22,5 @@ object Deps {
     const val exposedJdbc = "org.jetbrains.exposed:exposed-jdbc:$exposedVersion"
     const val exposedJavaTime = "org.jetbrains.exposed:exposed-java-time:$exposedVersion"
     const val hikari = "com.zaxxer:HikariCP:$hikariVersion"
+    const val koin = "io.insert-koin:koin-ktor:$koinVersion"
 }

@@ -41,6 +41,7 @@ dependencies {
     implementation(Deps.exposedJdbc)
     implementation(Deps.exposedJavaTime)
     implementation(Deps.hikari)
+    implementation(Deps.koin)
 
     testImplementation(Deps.ktorTests)
 }

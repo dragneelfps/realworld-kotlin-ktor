@@ -2,13 +2,18 @@ package com.nooblabs.service
 
 import com.nooblabs.models.ProfileResponse
 import com.nooblabs.models.User
-import com.nooblabs.service.DatabaseFactory.dbQuery
 import com.nooblabs.util.UserDoesNotExists
 import org.jetbrains.exposed.sql.SizedCollection
 
-class ProfileService() {
-    suspend fun getProfile(username: String, currentUserId: String? = null): ProfileResponse {
-        return dbQuery {
+interface IProfileService {
+    suspend fun getProfile(username: String, currentUserId: String? = null): ProfileResponse
+
+    suspend fun changeFollowStatus(toUserName: String, fromUserId: String, follow: Boolean): ProfileResponse
+}
+
+class ProfileService(private val databaseFactory: IDatabaseFactory) : IProfileService {
+    override suspend fun getProfile(username: String, currentUserId: String?): ProfileResponse {
+        return databaseFactory.dbQuery {
             val toUser = getUserByUsername(username) ?: return@dbQuery getProfileByUser(null, false)
             currentUserId ?: return@dbQuery getProfileByUser(toUser)
             val fromUser = getUser(currentUserId)
@@ -17,8 +22,8 @@ class ProfileService() {
         }
     }
 
-    suspend fun changeFollowStatus(toUserName: String, fromUserId: String, follow: Boolean): ProfileResponse {
-        dbQuery {
+    override suspend fun changeFollowStatus(toUserName: String, fromUserId: String, follow: Boolean): ProfileResponse {
+        databaseFactory.dbQuery {
             val toUser = getUserByUsername(toUserName) ?: throw UserDoesNotExists()
             val fromUser = getUser(fromUserId)
             if (follow) {
