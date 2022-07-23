@@ -6,10 +6,9 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.UUIDTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.timestamp
+import org.jetbrains.exposed.sql.javatime.timestamp
 import java.time.Instant
-import java.util.Locale
-import java.util.UUID
+import java.util.*
 
 object Articles : UUIDTable() {
     val slug = varchar("slug", 255)

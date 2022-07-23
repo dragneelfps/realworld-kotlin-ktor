@@ -6,7 +6,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.`java-time`.timestamp
+import org.jetbrains.exposed.sql.javatime.timestamp
 import java.time.Instant
 
 object Comments : IntIdTable() {

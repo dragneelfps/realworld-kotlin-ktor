@@ -1,9 +1,9 @@
 const val kotlinVersion = "1.7.10"
 const val ktorVersion = "1.6.0"
 const val logbackVersion = "1.2.3"
-const val h2Version = "1.4.200"
-const val exposedVersion = "0.32.1"
-const val hikariVersion = "4.0.3"
+const val h2Version = "2.1.214"
+const val exposedVersion = "0.38.2"
+const val hikariVersion = "5.0.1"
 const val koinVersion = "3.1.0"
 
 object Deps {
