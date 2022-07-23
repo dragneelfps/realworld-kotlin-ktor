@@ -2,22 +2,22 @@ package com.nooblabs
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import com.nooblabs.service.IDatabaseFactory
+import com.nooblabs.util.SimpleJWT
 import config.api
 import config.cors
-import config.jwt
+import config.jwtConfig
 import config.statusPages
-import io.ktor.application.Application
-import io.ktor.application.install
-import io.ktor.auth.Authentication
-import io.ktor.features.CORS
-import io.ktor.features.CallLogging
-import io.ktor.features.ContentNegotiation
-import io.ktor.features.DefaultHeaders
-import io.ktor.features.StatusPages
-import io.ktor.jackson.jackson
-import io.ktor.routing.routing
-import org.koin.ktor.ext.Koin
+import io.ktor.serialization.jackson.*
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.plugins.callloging.*
+import io.ktor.server.plugins.contentnegotiation.*
+import io.ktor.server.plugins.cors.routing.*
+import io.ktor.server.plugins.defaultheaders.*
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
+import org.koin.ktor.plugin.Koin
 import org.slf4j.event.Level
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -33,8 +33,10 @@ fun Application.module() {
         level = Level.INFO
     }
 
+    val simpleJWT = SimpleJWT(secret = environment.config.property("jwt.secret").getString())
+
     install(Authentication) {
-        jwt()
+        jwtConfig(simpleJWT)
     }
 
     install(ContentNegotiation) {
@@ -51,11 +53,13 @@ fun Application.module() {
     val factory: IDatabaseFactory by inject()
     factory.init()
 
+    install(StatusPages) {
+        statusPages()
+    }
+
     routing {
-        install(StatusPages) {
-            statusPages()
-        }
-        api()
+
+        api(simpleJWT)
     }
 }
 

@@ -3,15 +3,10 @@ package com.nooblabs.api
 import com.nooblabs.service.IProfileService
 import com.nooblabs.util.param
 import com.nooblabs.util.userId
-import io.ktor.application.call
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.authenticate
-import io.ktor.auth.principal
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.delete
-import io.ktor.routing.get
-import io.ktor.routing.post
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 fun Route.profile(profileService: IProfileService) {
 

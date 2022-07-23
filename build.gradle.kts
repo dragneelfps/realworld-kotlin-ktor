@@ -8,7 +8,6 @@ plugins {
 tasks.withType<KotlinCompile>() {
     kotlinOptions {
         jvmTarget = "18"
-        freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
     }
 }
 
@@ -30,11 +29,18 @@ repositories {
 }
 
 dependencies {
+    implementation(Deps.ktorServerCore)
     implementation(Deps.ktorServerNetty)
-    implementation(Deps.logback)
+    implementation(Deps.ktorAuth)
     implementation(Deps.ktorAuthJwt)
+    implementation(Deps.ktorContentNegotiation)
     implementation(Deps.ktorJackson)
+    implementation(Deps.ktorDefaultHeaders)
+    implementation(Deps.ktorCors)
+    implementation(Deps.ktorCallLogging)
+    implementation(Deps.ktorStatusPages)
 
+    implementation(Deps.logback)
     implementation(Deps.h2Database)
     implementation(Deps.exposedCore)
     implementation(Deps.exposedDao)
@@ -43,5 +49,7 @@ dependencies {
     implementation(Deps.hikari)
     implementation(Deps.koin)
 
+    testImplementation(Deps.kotlinTests)
     testImplementation(Deps.ktorTests)
+    testImplementation(Deps.ktorClientContentNegotiation)
 }

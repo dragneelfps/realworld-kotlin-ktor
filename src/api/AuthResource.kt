@@ -7,14 +7,11 @@ import com.nooblabs.models.UserResponse
 import com.nooblabs.service.IAuthService
 import com.nooblabs.util.SimpleJWT
 import com.nooblabs.util.userId
-import io.ktor.application.call
-import io.ktor.auth.authenticate
-import io.ktor.request.receive
-import io.ktor.response.respond
-import io.ktor.routing.Route
-import io.ktor.routing.get
-import io.ktor.routing.post
-import io.ktor.routing.put
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 fun Route.auth(authService: IAuthService, simpleJWT: SimpleJWT) {
 

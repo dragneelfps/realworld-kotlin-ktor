@@ -1,13 +1,11 @@
 package config
 
 import com.nooblabs.util.SimpleJWT
-import io.ktor.auth.Authentication
-import io.ktor.auth.UserIdPrincipal
-import io.ktor.auth.jwt.jwt
+import io.ktor.server.auth.*
+import io.ktor.server.auth.jwt.*
 
-val simpleJWT = SimpleJWT("my-secret")
+fun AuthenticationConfig.jwtConfig(simpleJWT: SimpleJWT) {
 
-fun Authentication.Configuration.jwt() {
     jwt {
         authSchemes("Token")
         verifier(simpleJWT.verifier)
