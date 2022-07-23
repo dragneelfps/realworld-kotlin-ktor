@@ -8,7 +8,7 @@ plugins {
 tasks.withType<KotlinCompile>() {
     kotlinOptions {
         jvmTarget = "18"
-        freeCompilerArgs = listOf("-Xopt-in=kotlin.RequiresOptIn")
+        freeCompilerArgs = listOf("-opt-in=kotlin.RequiresOptIn")
     }
 }
 
