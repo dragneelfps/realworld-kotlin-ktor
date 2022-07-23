@@ -30,7 +30,6 @@ repositories {
 }
 
 dependencies {
-    implementation(Deps.kotlinLib)
     implementation(Deps.ktorServerNetty)
     implementation(Deps.logback)
     implementation(Deps.ktorAuthJwt)

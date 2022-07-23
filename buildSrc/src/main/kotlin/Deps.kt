@@ -7,8 +7,6 @@ const val hikariVersion = "5.0.1"
 const val koinVersion = "3.1.0"
 
 object Deps {
-    const val kotlinLib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-
     const val ktorServerNetty = "io.ktor:ktor-server-netty:$ktorVersion"
     const val ktorAuthJwt = "io.ktor:ktor-auth-jwt:$ktorVersion"
     const val ktorJackson = "io.ktor:ktor-jackson:$ktorVersion"
