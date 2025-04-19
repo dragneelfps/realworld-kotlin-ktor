@@ -7,3 +7,4 @@
 *.iws
 buildSrc/.gradle
 buildSrc/build
+h2db

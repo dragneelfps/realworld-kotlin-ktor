@@ -1,15 +1,15 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     application
-    kotlin("jvm") version kotlinVersion
+    alias(libs.plugins.kotlin.jvm)
 }
 
-tasks.withType<KotlinCompile>() {
-    kotlinOptions {
-        jvmTarget = "18"
-    }
-}
+//tasks.withType<KotlinCompile>() {
+//    kotlinOptions {
+//        jvmTarget = "21"
+//    }
+//}
 
 group = "realworld"
 version = "0.0.1"
@@ -18,38 +18,44 @@ application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
 
-kotlin.sourceSets["main"].kotlin.srcDirs("src")
-kotlin.sourceSets["test"].kotlin.srcDirs("test")
-
-sourceSets["main"].resources.srcDirs("resources")
-sourceSets["test"].resources.srcDirs("testresources")
+//kotlin.sourceSets["main"].kotlin.srcDirs("src")
+//kotlin.sourceSets["test"].kotlin.srcDirs("test")
+//
+//sourceSets["main"].resources.srcDirs("resources")
+//sourceSets["test"].resources.srcDirs("testresources")
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    implementation(Deps.ktorServerCore)
-    implementation(Deps.ktorServerNetty)
-    implementation(Deps.ktorAuth)
-    implementation(Deps.ktorAuthJwt)
-    implementation(Deps.ktorContentNegotiation)
-    implementation(Deps.ktorJackson)
-    implementation(Deps.ktorDefaultHeaders)
-    implementation(Deps.ktorCors)
-    implementation(Deps.ktorCallLogging)
-    implementation(Deps.ktorStatusPages)
+    implementation(libs.ktor.server.core)
+    implementation(libs.ktor.server.netty)
+    implementation(libs.ktor.auth)
+    implementation(libs.ktor.auth.jwt)
+    implementation(libs.ktor.content.negotiation)
+    implementation(libs.ktor.jackson)
+    implementation(libs.ktor.default.headers)
+    implementation(libs.ktor.cors)
+    implementation(libs.ktor.call.logging)
+    implementation(libs.ktor.status.pages)
+    implementation(libs.ktor.client.content.negotiation)
 
-    implementation(Deps.logback)
-    implementation(Deps.h2Database)
-    implementation(Deps.exposedCore)
-    implementation(Deps.exposedDao)
-    implementation(Deps.exposedJdbc)
-    implementation(Deps.exposedJavaTime)
-    implementation(Deps.hikari)
-    implementation(Deps.koin)
+    // Logging
+    implementation(libs.logback)
 
-    testImplementation(Deps.kotlinTests)
-    testImplementation(Deps.ktorTests)
-    testImplementation(Deps.ktorClientContentNegotiation)
+    // Database (Exposed & H2)
+    implementation(libs.h2.database)
+    implementation(libs.exposed.core)
+    implementation(libs.exposed.dao)
+    implementation(libs.exposed.jdbc)
+    implementation(libs.exposed.java.time)
+    implementation(libs.hikari)
+
+    // Dependency Injection
+    implementation(libs.koin.ktor)
+
+    // Testing dependencies
+    testImplementation(libs.kotlin.tests)
+    testImplementation(libs.ktor.tests) // Ktor test dependency
 }

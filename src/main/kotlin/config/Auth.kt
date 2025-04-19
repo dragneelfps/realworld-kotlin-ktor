@@ -10,6 +10,7 @@ fun AuthenticationConfig.jwtConfig(simpleJWT: SimpleJWT) {
         authSchemes("Token")
         verifier(simpleJWT.verifier)
         validate {
+            println(it.payload.getClaim("id").asString())
             UserIdPrincipal(it.payload.getClaim("id").asString())
         }
     }
