@@ -140,7 +140,7 @@ class ArticleService(private val databaseFactory: IDatabaseFactory) : IArticleSe
         val author = if (authorUserName != null) getUserByUsername(authorUserName) else null
         val articles = Article.find {
             if (author != null) (Articles.author eq author.id) else Op.TRUE
-        }.limit(limit, offset.toLong()).orderBy(Articles.createdAt to SortOrder.DESC)
+        }.limit(limit).offset(offset.toLong()).orderBy(Articles.createdAt to SortOrder.DESC)
         val filteredArticles = articles.filter { article ->
             if (favoritedByUserName != null) {
                 val favoritedByUser = getUserByUsername(favoritedByUserName)

@@ -1,6 +1,5 @@
 package config
 
-import com.fasterxml.jackson.module.kotlin.MissingKotlinParameterException
 import com.nooblabs.util.*
 import io.ktor.http.*
 import io.ktor.server.plugins.statuspages.*
@@ -17,11 +16,6 @@ fun StatusPagesConfig.statusPages() {
                 mapOf("errors" to mapOf("user" to listOf("exists")))
             )
             is UserDoesNotExists, is ArticleDoesNotExist, is CommentNotFound -> call.respond(HttpStatusCode.NotFound)
-            is MissingKotlinParameterException -> call.respond(
-                HttpStatusCode.UnprocessableEntity,
-                mapOf("errors" to mapOf(cause.parameter.name to listOf("can't be empty")))
-            )
-
         }
     }
 }

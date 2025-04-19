@@ -1,26 +1,26 @@
 [versions]
-kotlin = "1.7.10"
-ktor = "2.0.3"
-logback = "1.2.3"
-h2 = "2.1.214"
-exposed = "0.38.2"
-hikari = "5.0.1"
-koin = "3.2.0"
+kotlin = "2.1.10"
+ktor = "3.1.2"
+logback = "1.4.14"
+h2 = "2.3.232"
+exposed = "0.60.0"
+hikari = "6.3.0"
+koin = "4.1.0-Beta7"
 
 [libraries]
 # Ktor Dependencies
-ktor-server-core = { group = "io.ktor", name = "ktor-server-core", version.ref = "ktor" }
-ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty", version.ref = "ktor" }
-ktor-auth = { group = "io.ktor", name = "ktor-server-auth", version.ref = "ktor" }
-ktor-auth-jwt = { group = "io.ktor", name = "ktor-server-auth-jwt", version.ref = "ktor" }
-ktor-content-negotiation = { group = "io.ktor", name = "ktor-server-content-negotiation", version.ref = "ktor" }
-ktor-jackson = { group = "io.ktor", name = "ktor-serialization-jackson", version.ref = "ktor" }
-ktor-default-headers = { group = "io.ktor", name = "ktor-server-default-headers", version.ref = "ktor" }
-ktor-cors = { group = "io.ktor", name = "ktor-server-cors", version.ref = "ktor" }
-ktor-call-logging = { group = "io.ktor", name = "ktor-server-call-logging", version.ref = "ktor" }
-ktor-status-pages = { group = "io.ktor", name = "ktor-server-status-pages", version.ref = "ktor" }
-ktor-tests = { group = "io.ktor", name = "ktor-server-test-host", version.ref = "ktor" }
-ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-server-core = { group = "io.ktor", name = "ktor-server-core" }
+ktor-server-netty = { group = "io.ktor", name = "ktor-server-netty" }
+ktor-auth = { group = "io.ktor", name = "ktor-server-auth" }
+ktor-auth-jwt = { group = "io.ktor", name = "ktor-server-auth-jwt" }
+ktor-content-negotiation = { group = "io.ktor", name = "ktor-server-content-negotiation" }
+ktor-jackson = { group = "io.ktor", name = "ktor-serialization-jackson" }
+ktor-default-headers = { group = "io.ktor", name = "ktor-server-default-headers" }
+ktor-cors = { group = "io.ktor", name = "ktor-server-cors" }
+ktor-call-logging = { group = "io.ktor", name = "ktor-server-call-logging" }
+ktor-status-pages = { group = "io.ktor", name = "ktor-server-status-pages" }
+ktor-tests = { group = "io.ktor", name = "ktor-server-test-host" }
+ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation" }
 
 # Logging Dependencies
 logback = { group = "ch.qos.logback", name = "logback-classic", version.ref = "logback" }
@@ -34,10 +34,11 @@ exposed-java-time = { group = "org.jetbrains.exposed", name = "exposed-java-time
 hikari = { group = "com.zaxxer", name = "HikariCP", version.ref = "hikari" }
 
 # Dependency Injection Dependencies
-koin-ktor = { group = "io.insert-koin", name = "koin-ktor", version.ref = "koin" }
+koin-ktor = { group = "io.insert-koin", name = "koin-ktor3", version.ref = "koin" }
 
 # Testing Dependencies
 kotlin-tests = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.ref = "kotlin" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+ktor = { id = "io.ktor.plugin", version.ref = "ktor" }

@@ -1,15 +1,8 @@
-//import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    application
     alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.ktor)
 }
 
-//tasks.withType<KotlinCompile>() {
-//    kotlinOptions {
-//        jvmTarget = "21"
-//    }
-//}
 
 group = "realworld"
 version = "0.0.1"
@@ -17,12 +10,6 @@ version = "0.0.1"
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 }
-
-//kotlin.sourceSets["main"].kotlin.srcDirs("src")
-//kotlin.sourceSets["test"].kotlin.srcDirs("test")
-//
-//sourceSets["main"].resources.srcDirs("resources")
-//sourceSets["test"].resources.srcDirs("testresources")
 
 repositories {
     mavenCentral()

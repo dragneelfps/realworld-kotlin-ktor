@@ -5,6 +5,7 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
+import io.ktor.server.config.*
 import io.ktor.server.testing.*
 import java.time.LocalDateTime
 import kotlin.test.Test
@@ -22,6 +23,9 @@ class ApplicationTest {
 
     @Test
     fun `Register User`() = testApplication {
+        environment {
+            config = ApplicationConfig("application.conf")
+        }
         val client = createClient {
             install(ContentNegotiation) {
                 jackson()
@@ -55,7 +59,9 @@ class ApplicationTest {
 
     @Test
     fun `Login User`() = testApplication {
-
+        environment {
+            config = ApplicationConfig("application.conf")
+        }
         val client = createClient {
             install(ContentNegotiation) {
                 jackson()
